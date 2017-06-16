@@ -27,7 +27,7 @@ void preprocessPrimeNumbers() {
 
 int getResult(int number) {
 	int result = 0;
-	for (int i = 0; i < primeLength && number - primeNumbers[i]> primeNumbers[i]; i++) {
+	for (int i = 0; number - primeNumbers[i]> primeNumbers[i]; i++) {
 		int diff = number - primeNumbers[i];
 		int startIndex = i + 1;
 		int endIndex = primeLength - 1;
