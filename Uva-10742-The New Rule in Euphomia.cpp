@@ -6,9 +6,7 @@ using namespace std;
 const int SIZE = 1000001;
 int allNumbers[SIZE];
 int primeNumbers[SIZE];
-int sumOfTwoPrimes[SIZE];
-int compressedSums[SIZE];
-int sumArrayLength = 0;
+int primeLength;
 
 void preprocessPrimeNumbers() {
 	int upperBound = sqrt(SIZE);
@@ -24,32 +22,29 @@ void preprocessPrimeNumbers() {
 			primeNumbers[j++] = i;
 		}
 	}
-
-	for (int i = 0; i < j; i++) {
-		for (int k = i + 1; k < j; k++) {
-			int sum = primeNumbers[i] + primeNumbers[k];
-			if (sum >= SIZE - 1) {
-				break;
-			}
-			sumOfTwoPrimes[sum]++;
-		}
-	}
-
-	j = 0;
-	for (int i = 2; i < SIZE; i++) {
-		if (sumOfTwoPrimes[i] > 0) {
-			compressedSums[j++] = i;
-		}
-	}
-	sumArrayLength = j;
+	primeLength = j;
 }
 
-int getTotalNumberOfCombination(int index) {
-	int total = 0;
-	for (int i = 0; i <= index; i++) {
-		total += sumOfTwoPrimes[i];
+int getResult(int number) {
+	int result = 0;
+	for (int i = 0; i < primeLength && number - primeNumbers[i]> primeNumbers[i]; i++) {
+		int diff = number - primeNumbers[i];
+		int startIndex = i + 1;
+		int endIndex = primeLength - 1;
+		int currentIndex = i;
+		while (startIndex <= endIndex) {
+			int midIndex = (startIndex + endIndex) / 2;
+			if (primeNumbers[midIndex] <= diff) {
+				startIndex = midIndex + 1;
+				currentIndex = midIndex;
+			}
+			else {
+				endIndex = midIndex - 1;
+			}
+		}
+		result = result + currentIndex - i;
 	}
-	return total;
+	return result;
 }
 
 int main() {
@@ -62,32 +57,9 @@ int main() {
 	while ((cin >> inputNumber)) {
 		if (inputNumber != 0)
 		{
-			int startIndex = 0;
-			int endIndex = sumArrayLength - 1;
-			bool isItemFound = false;
-			int midIndex;
-			while (endIndex >= startIndex) {
-				midIndex = (startIndex + endIndex) / 2;
-				if (inputNumber > compressedSums[midIndex]) {
-					startIndex = midIndex + 1;
-				}
-				else if (inputNumber < compressedSums[midIndex]) {
-					endIndex = midIndex - 1;
-				}
-				else {
-					isItemFound = true;
-					break;
-				}
-			}
-			if (isItemFound) {
-				cout << "Case " << ++caseNo << ": " << getTotalNumberOfCombination(compressedSums[midIndex]) << endl;
-			}
-			else {
-				cout << "Case " << ++caseNo << ": " << getTotalNumberOfCombination(compressedSums[endIndex]) << endl;
-			}
+			cout << "Case " << ++caseNo << ": " << getResult(inputNumber) << endl;
 		}
 		else break;
-
 	}
 
 	return 0;
