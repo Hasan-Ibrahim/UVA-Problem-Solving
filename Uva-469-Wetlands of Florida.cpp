@@ -25,10 +25,7 @@ position pop() {
 	return stack[--stackTop];
 }
 
-int lineNo = 0;
-
 int calculate(int x, int y) {
-	++lineNo;
 	int area = 0;
 	if (matrix[x][y]) {
 		push({ x,y });
@@ -129,7 +126,6 @@ int main() {
 		}
 		if (testCase) {
 			cout << endl;
-			lineNo++;
 		}
 	}
 
