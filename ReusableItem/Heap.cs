@@ -22,13 +22,18 @@ namespace GenericHeap
 
         public T Pop()
         {
-            if (_heap.Count == 0) throw new IndexOutOfRangeException("Cannot pop item from empty heap.");
+            if (_heap.Count == 0) throw new IndexOutOfRangeException("Cannot pop item from an empty heap.");
             T root = _heap[0];
             int lastIndex = _heap.Count - 1;
             _heap[0] = _heap[lastIndex];
             _heap.RemoveAt(lastIndex);
             BubbleDown(0);
             return root;
+        }
+        
+        public T Peek(){
+        if (_heap.Count == 0) throw new IndexOutOfRangeException("Cannot pick item from an empty heap.");
+            return _heap[0];
         }
         
         public bool IsEmpty()
