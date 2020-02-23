@@ -17,7 +17,7 @@ namespace GenericHeap
         public void Insert(T item)
         {
             _heap.Add(item);
-            BubbleUp();
+            BubbleUp(_heap.Count - 1);
         }
 
         public T Pop()
@@ -27,7 +27,7 @@ namespace GenericHeap
             int lastIndex = _heap.Count - 1;
             _heap[0] = _heap[lastIndex];
             _heap.RemoveAt(lastIndex);
-            BubbleDown();
+            BubbleDown(0);
             return root;
         }
         
@@ -36,23 +36,15 @@ namespace GenericHeap
             return !_heap.Any();
         }
 
-        private void BubbleDown()
-        {
-            CheckChild(0);
-        }
-        private void BubbleUp()
-        {
-            CheckParent(_heap.Count-1);
-        }
-
-        void CheckChild(int index)
+        private void BubbleDown(int index)
         {
             if (index >= _heap.Count - 1) return;
 
             int leftChildIndex = index * 2 + 1;
             int rightChildIndex = index * 2 + 2;
 
-            if (leftChildIndex >= _heap.Count) {
+            if (leftChildIndex >= _heap.Count)
+            {
                 return;
             }
 
@@ -68,17 +60,17 @@ namespace GenericHeap
             if (ShouldSwap(_heap[index], _heap[targetIndex])) return;
 
             Swap(index, targetIndex);
-            CheckChild(targetIndex);
+            BubbleDown(targetIndex);
         }
 
-        private void CheckParent(int index)
+        private void BubbleUp(int index)
         {
             if (index == 0) return;
-            int parentIndex = (index -1) / 2;
-            if(ShouldSwap(_heap[index], _heap[parentIndex]))
+            int parentIndex = (index - 1) / 2;
+            if (ShouldSwap(_heap[index], _heap[parentIndex]))
             {
                 Swap(index, parentIndex);
-                CheckParent(parentIndex);
+                BubbleUp(parentIndex);
             }
             else
             {
